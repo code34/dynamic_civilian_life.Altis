@@ -2,7 +2,7 @@
 	Author: code34 nicolas_boiteux@yahoo.fr
 	Copyright (C) 2013 Nicolas BOITEUX
 
-	Dynamic Civilian Life v 1.0 (DCL)
+	Dynamic Civilian Life v 1.1 (DCL)
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,4 +31,7 @@
 	You can share, modify, distribute this script but don't remove the licence and the name of the original author
 
 	logs:
+		1.1 
+			MP support - tune optimization
+			Fix side support 
 		1.0 original version - pedestrian life on ALTIS

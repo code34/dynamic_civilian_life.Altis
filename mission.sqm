@@ -39,17 +39,17 @@ class Mission
 		items=1;
 		class Item0
 		{
-			side="WEST";
+			side="EAST";
 			class Vehicles
 			{
 				items=1;
 				class Item0
 				{
-					position[]={16301.009,25.332285,17301.92};
+					position[]={16300.382,25.316954,17300.771};
 					id=0;
-					side="WEST";
-					vehicle="B_Quadbike_01_F";
-					player="PLAY CDG";
+					side="EAST";
+					vehicle="O_Quadbike_01_F";
+					player="PLAYER COMMANDER";
 					leader=1;
 					skill=0.60000002;
 				};

@@ -2,7 +2,7 @@
 	Author: code34 nicolas_boiteux@yahoo.fr
 	Copyright (C) 2013 Nicolas BOITEUX
 
-	Dynamic Civilian Life v 1.0 (DCL)
+	Dynamic Civilian Life 
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,6 +18,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 	*/
 
+	// This script runs only on server side
+	if!(isserver) exitwith {};
+
+	private ["_side"];
+
 	_position = _this select 0;
 
 	_allunits = [];
@@ -25,12 +30,45 @@
 	_positions = [];
 	_start = true;
 
+	switch (toUpper(DCLpopsidecondition)) do {
+		case "WEST": {
+			_side = [west];
+		};
+
+		case "EAST": {
+			_side = [east];
+		};
+
+		case "GUER": {
+			_side = [resistance];
+		};
+
+		default {
+			_side = [west, east, resistance];
+		};
+	};
+
+	DCLcountside = {
+		private ["_array", "_count", "_side"];
+		_array = _this select 0;
+		_side = _this select 1;
+		_count = 0;
+		if (isnil "_array") exitwith {_count = 0; _count;};
+		{
+			if(side _x in _side) then {
+				_count = _count + 1;
+			};
+			sleep 0.0001;
+		}foreach _array;
+		_count;
+	};
+
 	_active = createTrigger["EmptyDetector", _position];
 	_active setTriggerArea[DCLdistancepop, DCLdistancepop, 0, false];
 	_active setTriggerActivation[DCLpopsidecondition, "PRESENT", TRUE];
 	_active setTriggerStatements["", "", ""];
 
-	waituntil {(west countside list _active > 0)};
+	while { ([(list _active), _side] call DCLcountside == 0) } do { sleep (random 5); };
 
 	_buildings = nearestObjects[_position,["House_F"], 150];
 	sleep 1;
@@ -55,7 +93,7 @@
 
 	while { true } do {
 		// restore civils
-		if((west countside list _active == 0) or _start) then {
+		if(([(list _active), _side] call DCLcountside == 0) or _start) then {
 			_start = false;
 			{
 				if(alive _x) then {
@@ -67,7 +105,7 @@
 				};
 			}foreach (units _group);
 			deletegroup _group;
-			waituntil {(west countside list _active > 0)};
+			while { ([(list _active), _side] call DCLcountside == 0) } do { sleep (random 5); };
 			_group = creategroup civilian;
 			{
 				_civiltype = _x select 0;
@@ -80,6 +118,7 @@
 					(_this select 0) playMove 'AmovPercMstpSnonWnonDnon_AmovPercMstpSsurWnonDnon';
 					(_this select 0) stop true;
 				}];
+				sleep 0.01;
 			}foreach _back;
 			wcgarbage = [_group] spawn walk;
 			_back = [];

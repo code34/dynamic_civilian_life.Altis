@@ -2,7 +2,7 @@
 	Author: code34 nicolas_boiteux@yahoo.fr
 	Copyright (C) 2013 Nicolas BOITEUX
 
-	Dynamic Civilian Life v 1.0 (DCL)
+	Dynamic Civilian Life
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,6 +17,9 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 	*/
+
+	// This script runs only on server side
+	if!(isserver) exitwith {};
 
 	//compute_zone	= compile preprocessFile "DCL\compute_zone.sqf";
 	generate_zone	= compile preprocessFile "DCL\generate_zone.sqf";
@@ -33,11 +36,11 @@
 
 	// civilian can move in house around 500 meters
 	// of theirs pop position
-	DCLdistancemove = 500;
+	DCLdistancemove = 300;
 
 	// Civilians pop  
-	// if side x is present "EAST", "WEST", "GUER", "CIV", "ANY"
-	DCLpopsidecondition = "WEST";
+	// if side x is present "EAST", "WEST", "GUER", "ANY"
+	DCLpopsidecondition = "ANY";
 
 	{
 		garbage = [_x] spawn generate_zone;

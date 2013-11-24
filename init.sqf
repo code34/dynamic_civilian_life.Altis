@@ -1,0 +1,1 @@
+	[] execVM "DCL\init.sqf";

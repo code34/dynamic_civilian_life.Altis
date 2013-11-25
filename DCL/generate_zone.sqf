@@ -21,9 +21,28 @@
 	// This script runs only on server side
 	if!(isserver) exitwith {};
 
-	private ["_side"];
+	private [
+			"_allunits",
+			"_back",
+			"_buildings",
+			"_civil",
+			"_civiltype",
+			"_civilrole",
+			"_index",
+			"_group",
+			"_number",
+			"_position",
+			"_positions",
+			"_start",
+			"_side",
+			"_trigger"
+	];
 
 	_position = _this select 0;
+
+	if (isnil "_position") exitwith { hint "DCL: empty position";};
+	if (count _position < 1) exitwith { hint "DCL: required a position ARRAY";};
+	if (surfaceiswater _position) exitwith { hint "DCL: position is in the water";};
 
 	_allunits = [];
 	_back = [];
@@ -63,12 +82,12 @@
 		_count;
 	};
 
-	_active = createTrigger["EmptyDetector", _position];
-	_active setTriggerArea[DCLdistancepop, DCLdistancepop, 0, false];
-	_active setTriggerActivation[DCLpopsidecondition, "PRESENT", TRUE];
-	_active setTriggerStatements["", "", ""];
+	_trigger = createTrigger["EmptyDetector", _position];
+	_trigger setTriggerArea[DCLdistancepop, DCLdistancepop, 0, false];
+	_trigger setTriggerActivation[DCLpopsidecondition, "PRESENT", TRUE];
+	_trigger setTriggerStatements["", "", ""];
 
-	while { ([(list _active), _side] call DCLcountside == 0) } do { sleep (random 5); };
+	while { ([(list _trigger), _side] call DCLcountside == 0) } do { sleep (random 5); };
 
 	_buildings = nearestObjects[_position,["House_F"], 150];
 	sleep 1;
@@ -93,7 +112,7 @@
 
 	while { true } do {
 		// restore civils
-		if(([(list _active), _side] call DCLcountside == 0) or _start) then {
+		if(([(list _trigger), _side] call DCLcountside == 0) or _start) then {
 			_start = false;
 			{
 				if(alive _x) then {
@@ -105,7 +124,7 @@
 				};
 			}foreach (units _group);
 			deletegroup _group;
-			while { ([(list _active), _side] call DCLcountside == 0) } do { sleep (random 5); };
+			while { ([(list _trigger), _side] call DCLcountside == 0) } do { sleep (random 5); };
 			_group = creategroup civilian;
 			{
 				_civiltype = _x select 0;
@@ -118,7 +137,7 @@
 					(_this select 0) playMove 'AmovPercMstpSnonWnonDnon_AmovPercMstpSsurWnonDnon';
 					(_this select 0) stop true;
 				}];
-				sleep 0.01;
+				sleep 0.1;
 			}foreach _back;
 			wcgarbage = [_group] spawn walk;
 			_back = [];

@@ -31,14 +31,15 @@
 	// civilian pop when players are at x meters
 	DCLdistancepop = 800;
 
-	// civilian number by group
+	// Civilians are in a group when they pop
+	// Number max random of civilians in the group are x numbers
 	DCLgroupsize = 5;
 
-	// civilian can move in house around 500 meters
-	// of theirs pop position
+	// civilian can move in houses around x meters
+	// of theirs initial position
 	DCLdistancemove = 300;
 
-	// Civilians pop  
+	// Civilians pop   
 	// if side x is present "EAST", "WEST", "GUER", "ANY"
 	DCLpopsidecondition = "ANY";
 

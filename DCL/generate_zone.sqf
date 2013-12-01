@@ -19,7 +19,9 @@
 	*/
 
 	// This script runs only on server side
-	if!(isserver) exitwith {};
+
+	if(!(isserver) and !(DCLusehclient)) exitwith {};
+	if(!(!hasInterface && !isServer && name player == DCLhclientname) and DCLusehclient) exitwith {};
 
 	private [
 			"_allunits",
@@ -34,7 +36,6 @@
 			"_position",
 			"_positions",
 			"_start",
-			"_side",
 			"_trigger"
 	];
 
@@ -49,32 +50,13 @@
 	_positions = [];
 	_start = true;
 
-	switch (toUpper(DCLpopsidecondition)) do {
-		case "WEST": {
-			_side = [west];
-		};
-
-		case "EAST": {
-			_side = [east];
-		};
-
-		case "GUER": {
-			_side = [resistance];
-		};
-
-		default {
-			_side = [west, east, resistance];
-		};
-	};
-
-	DCLcountside = {
-		private ["_array", "_count", "_side"];
+	DCLcountplayer = {
+		private ["_array", "_count"];
 		_array = _this select 0;
-		_side = _this select 1;
 		_count = 0;
 		if (isnil "_array") exitwith {_count = 0; _count;};
 		{
-			if(side _x in _side) then {
+			if(isplayer _x) then {
 				_count = _count + 1;
 			};
 			sleep 0.0001;
@@ -82,26 +64,26 @@
 		_count;
 	};
 
+	// List all units in Zone
 	_trigger = createTrigger["EmptyDetector", _position];
 	_trigger setTriggerArea[DCLdistancepop, DCLdistancepop, 0, false];
-	_trigger setTriggerActivation[DCLpopsidecondition, "PRESENT", TRUE];
+	_trigger setTriggerActivation["ANY", "PRESENT", TRUE];
 	_trigger setTriggerStatements["", "", ""];
-
-	while { ([(list _trigger), _side] call DCLcountside == 0) } do { sleep (random 5); };
+	
+	while { ([(list _trigger)] call DCLcountplayer == 0) } do { sleep (random 5); };
 
 	_buildings = nearestObjects[_position,["House_F"], 150];
 	sleep 1;
 	{
 		_index = 0;
 		while { format ["%1", _x buildingPos _index] != "[0,0,0]" } do {
-			_positione = _x buildingPos _index;
-			_positions = _positions + [_positione];
+			_positions = _positions + [(_x buildingPos _index)];
 			_index = _index + 1;
 		};
 	}foreach _buildings;
 
 	_number = 1 + round (random DCLgroupsize);
-	_group = creategroup civilian;
+	_group = creategroup DCLcivilianside;
 	for "_x" from 0 to _number do {
 		_civiltype = civilclass call BIS_fnc_selectRandom;
 		_position = _positions call BIS_fnc_selectRandom;
@@ -112,7 +94,7 @@
 
 	while { true } do {
 		// restore civils
-		if(([(list _trigger), _side] call DCLcountside == 0) or _start) then {
+		if(([(list _trigger)] call DCLcountplayer == 0) or _start) then {
 			_start = false;
 			{
 				if(alive _x) then {
@@ -122,10 +104,11 @@
 					_x setdammage 1;
 					deletevehicle _x;
 				};
+				sleep 0.1;
 			}foreach (units _group);
 			deletegroup _group;
-			while { ([(list _trigger), _side] call DCLcountside == 0) } do { sleep (random 5); };
-			_group = creategroup civilian;
+			while { ([(list _trigger)] call DCLcountplayer == 0) } do { sleep (random 5); };
+			_group = creategroup DCLcivilianside;
 			{
 				_civiltype = _x select 0;
 				_civil = _group createUnit [_civiltype, (_x select 1), [], 0, "FORM"];

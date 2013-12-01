@@ -39,9 +39,14 @@
 	// of theirs initial position
 	DCLdistancemove = 300;
 
-	// Civilians pop   
-	// if side x is present "EAST", "WEST", "GUER", "ANY"
-	DCLpopsidecondition = "ANY";
+	// civilian side
+	DCLcivilianside = civilian;
+
+	// HC client
+	DCLusehclient = false;
+
+	// HC client name
+	DCLhclientname = "HC";
 
 	{
 		garbage = [_x] spawn generate_zone;

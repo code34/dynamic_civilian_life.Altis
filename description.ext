@@ -1,1 +1,9 @@
 Author = "Code34";
+class Header {
+	maxPlayers = 1;
+	minPlayers = 1;
+	gameType = COOP;
+};
+name = "DCL";
+overviewText = "Dynamic Civilian Life";
+overviewTextLocked = "Dynamic Civilian Life sample in a test mission.";

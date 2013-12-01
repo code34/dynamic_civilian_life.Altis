@@ -31,6 +31,10 @@
 	You can share, modify, distribute this script but don't remove the licence and the name of the original author
 
 	logs:
+		1.2
+			add HC client support
+			add civilian side
+			replace side detection by player detection (fix depop problem)
 		1.1 
 			MP support - tune optimization
 			Fix side support 

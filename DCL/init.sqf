@@ -21,7 +21,6 @@
 	// This script runs only on server side
 	if!(isserver) exitwith {};
 
-	//compute_zone	= compile preprocessFile "DCL\compute_zone.sqf";
 	generate_zone	= compile preprocessFile "DCL\generate_zone.sqf";
 	walk		= compile preprocessFile "DCL\walk.sqf";
 
